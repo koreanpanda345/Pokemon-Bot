@@ -1,0 +1,5 @@
+{
+    "TEST": "Hello World",
+    "WELCOME_&NAME_&BOTNAME": "Hello, {0}. My name is {1}! How can I help you?",
+    "SECRET":  "||I LIKE PANDAS||"
+}
