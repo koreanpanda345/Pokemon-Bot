@@ -13,21 +13,21 @@ namespace PokemonBot.Core.Xp
     {
         internal static async void UserSentMessage(SocketGuildUser user, SocketTextChannel channel)
         {
-           int Current = Data.Data.GetXp(user.Id, Data.Data.GetSelected(user.Id));
-            double NextLevel = Math.Round((4 * (Math.Pow(Data.Data.GetLevel(user.Id, Data.Data.GetSelected(user.Id)), 3)) / 5 * 2));
+           int Current = Data.PokemonData.GetXp(user.Id, Data.PokemonData.GetSelected(user.Id));
+            double NextLevel = Math.Round((4 * (Math.Pow(Data.PokemonData.GetLevel(user.Id, Data.PokemonData.GetSelected(user.Id)), 3)) / 5 * 2));
             if (Current >= NextLevel)
             {
-                Data.Data.LevelUp(user.Id, Data.Data.GetSelected(user.Id));
+                Data.PokemonData.LevelUp(user.Id, Data.PokemonData.GetSelected(user.Id));
                 EmbedBuilder embed = new EmbedBuilder();
                 embed.WithTitle($"Congratulations {user.Id}");
-                embed.WithDescription($"Your {Data.Data.GetPokemon(user.Id, Data.Data.GetSelected(user.Id))}");
+                embed.WithDescription($"Your {Data.PokemonData.GetPokemon(user.Id, Data.PokemonData.GetSelected(user.Id))}");
 
                 await channel.SendMessageAsync("", embed: embed.Build());
-                Data.Data.ResetXp(user.Id, Data.Data.GetSelected(user.Id));
+                Data.PokemonData.ResetXp(user.Id, Data.PokemonData.GetSelected(user.Id));
             }
             else
             { 
-                Data.Data.AddXp(user.Id, Data.Data.GetSelected(user.Id), 200);
+                Data.PokemonData.AddXp(user.Id, Data.PokemonData.GetSelected(user.Id), 200);
             }
         }
     }

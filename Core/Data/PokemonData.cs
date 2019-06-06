@@ -13,7 +13,7 @@ namespace PokemonBot.Core.Data
         public ulong Userid { get; set; }
         public int PokemonNumber { get; set; }
     }
-    public static class Data
+    public static class PokemonData
     {
         public static int GetXp(ulong id, int num)
         {
@@ -67,24 +67,6 @@ namespace PokemonBot.Core.Data
             myCommand.Parameters.AddWithValue("@level", GetLevel(id, num) + 1);
             myCommand.ExecuteNonQuery();
             database.CloseConnection();
-        }
-        public static bool HasStarter(ulong id)
-        {
-            SqliteDbContext database = new SqliteDbContext();
-            string query = $"SELECT * FROM '{id.ToString()}'";
-            SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
-            database.OpenConnection();
-            SQLiteDataReader result = myCommand.ExecuteReader();
-            if (result.HasRows)
-            {
-                while (result.Read())
-                {
-                    return true;
-                }
-            }
-            result.Close();
-            database.CloseConnection();
-            return false;
         }
         public static int GetSelected(ulong id)
         {
@@ -156,6 +138,7 @@ namespace PokemonBot.Core.Data
 
 
         }
+
         public static int GetLevel(ulong id, int num)
         {
             SqliteDbContext database = new SqliteDbContext();
@@ -175,6 +158,26 @@ namespace PokemonBot.Core.Data
             database.CloseConnection();
             Console.WriteLine(database.myConnection);
             return 0;
+        }
+        public static string GetMoves(ulong id, int num)
+        {
+            int select = GetSelected(id);
+            SqliteDbContext database = new SqliteDbContext();
+            string query = $"SELECT {select}, * FROM '{id.ToString()}' WHERE id = {select}";
+            SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
+            database.OpenConnection();
+            SQLiteDataReader result = myCommand.ExecuteReader();
+            if (result.HasRows)
+            {
+                while (result.Read())
+                {
+                    return $"{result[$"Move{num}"]}";
+                }
+            }
+            result.Close();
+            database.CloseConnection();
+            Console.WriteLine(database.myConnection);
+            return "";
         }
         public static int GetIvs(ulong id, int num, int iv)
         {
@@ -196,7 +199,6 @@ namespace PokemonBot.Core.Data
                     IVs.Add((int)result["spe"]);
                 }
             }
-            Console.WriteLine(IVs[iv]);
             result.Close();
             database.CloseConnection();
             return IVs[iv];
@@ -217,13 +219,13 @@ namespace PokemonBot.Core.Data
             database.CloseConnection();
             Console.WriteLine("Player info has been stored");
 
-            string pokemonQuery = $"CREATE TABLE IF NOT EXISTS '{id.ToString()}'(pokemon varchar(24), level int, nature varchar(24), hp int, atk int, def int, spatk int, spdef int, spe int)";
+            string pokemonQuery = $"CREATE TABLE IF NOT EXISTS '{id.ToString()}'(id varchar(24), pokemon varchar(24), level int, nature varchar(24), hp int, atk int, def int, spatk int, spdef int, spe int, shiny int, Move1 text, Move2 text, Move3 text, Move4 text)";
                 SQLiteCommand newcommand = new SQLiteCommand(pokemonQuery, database.myConnection);
             database.OpenConnection();
             newcommand.ExecuteNonQuery();
             database.CloseConnection();
             Console.WriteLine("Passed the Database section");
-            string pokeQuery = $"INSERT INTO '{id.ToString()}'(`id`,`pokemon`, `level`, nature, hp, atk, def,spatk,spdef,spe) VALUES(@id, @pokemon, @level, @nature, @hp, @atk,@def, @spatk, @spdef, @spe);";
+            string pokeQuery = $"INSERT INTO '{id.ToString()}'(`id`,`pokemon`, `level`, nature, hp, atk, def,spatk,spdef,spe, shiny, Move1, Move2, Move3, Move4) VALUES(@id, @pokemon, @level, @nature, @hp, @atk,@def, @spatk, @spdef, @spe, @shiny, @Move1, @Move2, @Move3, @Move4);";
                 SQLiteCommand _command = new SQLiteCommand(pokeQuery, database.myConnection);
             database.OpenConnection();
             _command.Parameters.AddWithValue("@id", $"1");
@@ -236,6 +238,11 @@ namespace PokemonBot.Core.Data
             _command.Parameters.AddWithValue("@spatk", $"{Iv[3]}");
             _command.Parameters.AddWithValue("@spdef", $"{Iv[4]}");
             _command.Parameters.AddWithValue("@spe", $"{Iv[5]}");
+            _command.Parameters.AddWithValue("@shiny", $"0");
+            _command.Parameters.AddWithValue("@Move1", $"Tackle");
+            _command.Parameters.AddWithValue("@Move2", $"Tackle");
+            _command.Parameters.AddWithValue("@Move3", $"Tackle");
+            _command.Parameters.AddWithValue("@Move4", $"Tackle");
             _command.ExecuteNonQuery();
             
             database.CloseConnection();
@@ -267,6 +274,7 @@ namespace PokemonBot.Core.Data
             Console.WriteLine(database.myConnection);
             return 0;
         }
+
         public static bool IsShiny(ulong id, int num)
         {
             SqliteDbContext database = new SqliteDbContext();
@@ -330,6 +338,10 @@ namespace PokemonBot.Core.Data
             _command.Parameters.AddWithValue("@spdef", $"{Iv[4]}");
             _command.Parameters.AddWithValue("@spe", $"{Iv[5]}");
             _command.Parameters.AddWithValue("@shiny", shiny);
+            _command.Parameters.AddWithValue("@Move1", $"Tackle");
+            _command.Parameters.AddWithValue("@Move2", $"Tackle");
+            _command.Parameters.AddWithValue("@Move3", $"Tackle");
+            _command.Parameters.AddWithValue("@Move4", $"Tackle");
             _command.ExecuteNonQuery();
 
             database.CloseConnection();
@@ -338,6 +350,7 @@ namespace PokemonBot.Core.Data
             Console.WriteLine($"Created a new row with {PokeName}, {level}");
 
         }
+
         /**
          * SELECT TOP 1 * FROM MyTable ORDER BY MyColumn DESC
          * 

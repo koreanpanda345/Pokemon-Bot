@@ -35,7 +35,7 @@ namespace PokemonBot.Core.Commands
         [Command("pick"), Summary("Lets you pick your starter")]
         public async Task _Pick(string poke)
         {
-            //if (Data.Data.HasStarter(Context.Message.Author.Username))
+            //if (Data.PokemonData.HasStarter(Context.Message.Author.Username))
             //{
               //  await Context.Channel.SendMessageAsync("You already have a starter");
                 //return;
@@ -106,14 +106,8 @@ namespace PokemonBot.Core.Commands
             int[] Iv = { hp, atk, def, spAtk, spDef, spe };
             await Context.Channel.SendMessageAsync("", embed: embed.Build());
 
-            await Data.Data.CreateAccount(Context.Message.Author.Id, poke, 5, Iv, _nature);
-            Id id = new Id();
-            id.PokemonNumber = 0;
-            id.Userid = Context.Message.Author.Id;
-            string Result = JsonConvert.SerializeObject(id);
-            Console.WriteLine(Result);
-            File.WriteAllText("@Resorces/Player.json", Result);
-            Console.WriteLine("Stored!");
+            await Data.PokemonData.CreateAccount(Context.Message.Author.Id, poke, 5, Iv, _nature);
+
         }
 
         public int RandomNumber(int min, int max)

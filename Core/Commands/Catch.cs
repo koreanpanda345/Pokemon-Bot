@@ -22,11 +22,6 @@ namespace PokemonBot.Core.Commands
         [Command("catch")]
         public async Task _Catch(string name)
         {
-            //if (!Data.Data.HasStarter(Context.Message.Author.Username))
-            //{
-              //  await Context.Channel.SendMessageAsync("You do not have a starter yet.");
-                //return;
-            //}
             string result = File.ReadAllText(@"Resources/Spawned.json");
             Spawned spawn = JsonConvert.DeserializeObject<Spawned>(result);
             Console.WriteLine(spawn.name);
@@ -83,7 +78,7 @@ namespace PokemonBot.Core.Commands
                 int[] IV = { spawnHp, spawnAtk, spawnDef, spawnSpAtk, spawnSpDef, spawnSpe };
                
 
-                await Data.Data.SavePokemon(Context.Message.Author.Id, spawn.name, lvl, IV, _nature, shiny);
+                await Data.PokemonData.SavePokemon(Context.Message.Author.Id, spawn.name, lvl, IV, _nature, shiny);
                 await Context.Channel.SendMessageAsync($"Congratulations <@{Context.User.Id}>! You caught a **level {lvl} {spawn.name}**! ");
               
                 Spawned _spawn = new Spawned()
