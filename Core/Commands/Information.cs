@@ -147,6 +147,10 @@ namespace PokemonBot.Core.Commands
             /**
              * Natures
               */
+              if(nature == "Lonely"){
+              atk *=1.10;
+              def /= 1.10;
+              }
             //Attacks
             Iv.Add(atk);
             Iv.Add(def);
