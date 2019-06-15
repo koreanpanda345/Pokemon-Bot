@@ -13,6 +13,7 @@ namespace PokemonBot.Core.Xp
     {
         internal static async void UserSentMessage(SocketGuildUser user, SocketTextChannel channel)
         {
+            
            int Current = Data.PokemonData.GetXp(user.Id, Data.PokemonData.GetSelected(user.Id));
             double NextLevel = Math.Round((4 * (Math.Pow(Data.PokemonData.GetLevel(user.Id, Data.PokemonData.GetSelected(user.Id)), 3)) / 5 * 2));
             if (Current >= NextLevel)
@@ -24,6 +25,7 @@ namespace PokemonBot.Core.Xp
 
                 await channel.SendMessageAsync("", embed: embed.Build());
                 Data.PokemonData.ResetXp(user.Id, Data.PokemonData.GetSelected(user.Id));
+                //Evolve.Evolving(user, channel);
             }
             else
             { 

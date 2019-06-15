@@ -19,9 +19,14 @@ namespace PokemonBot.Core.Commands
     public class Catch : ModuleBase<SocketCommandContext>
     {
         private List<Id> _ID;
-        [Command("catch")]
+        [Command("catch"), Summary("Lets you catch a pokemon that appears.")]
         public async Task _Catch(string name)
         {
+            if (!Data.PokemonData.HasStarter(Context.Message.Author.Id))
+            {
+                await Context.Channel.SendMessageAsync("You do not have a starter.");
+                return;
+            }
             string result = File.ReadAllText(@"Resources/Spawned.json");
             Spawned spawn = JsonConvert.DeserializeObject<Spawned>(result);
             Console.WriteLine(spawn.name);

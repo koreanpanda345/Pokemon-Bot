@@ -16,7 +16,7 @@ namespace PokemonBot.Core.Commands
     {
         PokeApiClient pokeClient = new PokeApiClient();
 
-        [Command("start"), Summary("opens a list of starts that the user can choose from")]
+        [Command("start"), Summary("displays a list of starters you can choose from")]
         public async Task _Start()
         {
             var embed = new EmbedBuilder();
@@ -33,13 +33,14 @@ namespace PokemonBot.Core.Commands
             await Context.Channel.SendMessageAsync("", embed: embed.Build());
         }
         [Command("pick"), Summary("Lets you pick your starter")]
-        public async Task _Pick(string poke)
+        public async Task _Pick(string PokemonName)
         {
-            //if (Data.PokemonData.HasStarter(Context.Message.Author.Username))
-            //{
-              //  await Context.Channel.SendMessageAsync("You already have a starter");
-                //return;
-            //}
+            string poke = PokemonName;
+            if (Data.PokemonData.HasStarter(Context.Message.Author.Id))
+            {
+                await Context.Channel.SendMessageAsync("You already have a starter");
+                return;
+            }
             if (!(poke == "charmander" || poke == "bulbasaur" || poke == "squirtle"
             || poke == "chikorita" || poke == "totodile" || poke == "cyndaquil"
             || poke == "mudkip" || poke == "treecko" || poke == "torchic"

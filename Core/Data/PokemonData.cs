@@ -15,12 +15,24 @@ namespace PokemonBot.Core.Data
     }
     public static class PokemonData
     {
+        public static async Task EvolvePokemon(ulong id, int num, string pokemon)
+        {
+            SqliteDbContext database = new SqliteDbContext();
+            string query = $"UPDATE '{id.ToString()}' SET pokemon = @pokemon WHERE id = {num}";
+            SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
+            database.OpenConnection();
+            myCommand.Parameters.AddWithValue("@pokemon", pokemon);
+            myCommand.Prepare();
+            myCommand.ExecuteNonQuery();
+            database.CloseConnection();
+        }
         public static int GetXp(ulong id, int num)
         {
             SqliteDbContext database = new SqliteDbContext();
             string query = $"SELECT {num}, * FROM '{id.ToString()}' WHERE id = {num}";
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
+            myCommand.Prepare();
             SQLiteDataReader result = myCommand.ExecuteReader();
             int i;
             if (result.HasRows)
@@ -29,7 +41,6 @@ namespace PokemonBot.Core.Data
                 {
                     string intString = result["xp"].ToString();
                     i = System.Convert.ToInt32(intString);
-                    Console.WriteLine($"{result}");
                     return i;
                 }
             }
@@ -44,6 +55,7 @@ namespace PokemonBot.Core.Data
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
             myCommand.Parameters.AddWithValue("@xp", 0);
+            myCommand.Prepare();
             myCommand.ExecuteNonQuery();
             database.CloseConnection();
         }
@@ -54,6 +66,7 @@ namespace PokemonBot.Core.Data
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
             myCommand.Parameters.AddWithValue("@xp", GetXp(id, num) + xp);
+            myCommand.Prepare();
             myCommand.ExecuteNonQuery();
             database.CloseConnection();
             Console.WriteLine("Added xp");
@@ -65,6 +78,7 @@ namespace PokemonBot.Core.Data
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
             myCommand.Parameters.AddWithValue("@level", GetLevel(id, num) + 1);
+            myCommand.Prepare();
             myCommand.ExecuteNonQuery();
             database.CloseConnection();
         }
@@ -75,6 +89,7 @@ namespace PokemonBot.Core.Data
             string query = $"SELECT selected, * FROM player WHERE id = '{id.ToString()}'";
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
+            myCommand.Prepare();
             SQLiteDataReader result = myCommand.ExecuteReader();
             if (result.HasRows)
             {
@@ -83,7 +98,6 @@ namespace PokemonBot.Core.Data
                     int i;
                     string intString = result["selected"].ToString();
                     i = System.Convert.ToInt32(intString);
-                    Console.WriteLine($"{result}");
                     return i;
                 }
             }
@@ -92,18 +106,34 @@ namespace PokemonBot.Core.Data
             return 0;
 
         }
+        public static bool HasStarter(ulong id)
+        {
+            SqliteDbContext database = new SqliteDbContext();
+            string query = $"SELECT * FROM player WHERE Id = {id}";
+            SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
+            database.OpenConnection();
+            myCommand.Prepare();
+            SQLiteDataReader result = myCommand.ExecuteReader();
+            if (result.HasRows)
+            {
+                return true;
+            }
+            result.Close();
+            database.CloseConnection();
+            return false;
+        }
         public static string GetNature(ulong id, int num)
         {
             SqliteDbContext database = new SqliteDbContext();
             string query = $"SELECT {num}, * FROM '{id.ToString()}' WHERE id = {num}";
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
+            myCommand.Prepare();
             SQLiteDataReader result = myCommand.ExecuteReader();
             if (result.HasRows)
             {
                 while (result.Read())
                 {
-                    Console.WriteLine($"{result}");
                     return $"{result["nature"]}";
                 }
             }
@@ -122,18 +152,17 @@ namespace PokemonBot.Core.Data
             string query = $"SELECT {num}, * FROM '{id.ToString()}' WHERE id = {num}";
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
+            myCommand.Prepare();
             SQLiteDataReader result = myCommand.ExecuteReader();
             if (result.HasRows)
             {
                 while (result.Read())
                 {
-                    Console.WriteLine($"{result}");
                     return $"{result["pokemon"]}";
                 }
             }
             result.Close();
             database.CloseConnection();
-            Console.WriteLine(database.myConnection);
             return "";
 
 
@@ -145,18 +174,17 @@ namespace PokemonBot.Core.Data
             string query = $"SELECT {num}, * FROM '{id.ToString()}' WHERE id = {num}";
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
+            myCommand.Prepare();
             SQLiteDataReader result = myCommand.ExecuteReader();
             if (result.HasRows)
             {
                 while (result.Read())
                 {
-                    Console.WriteLine($"{result["level"]}");
                     return (int)result["level"];
                 }
             }
             result.Close();
             database.CloseConnection();
-            Console.WriteLine(database.myConnection);
             return 0;
         }
         public static string GetMoves(ulong id, int num)
@@ -166,6 +194,7 @@ namespace PokemonBot.Core.Data
             string query = $"SELECT {select}, * FROM '{id.ToString()}' WHERE id = {select}";
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
+            myCommand.Prepare();
             SQLiteDataReader result = myCommand.ExecuteReader();
             if (result.HasRows)
             {
@@ -176,7 +205,6 @@ namespace PokemonBot.Core.Data
             }
             result.Close();
             database.CloseConnection();
-            Console.WriteLine(database.myConnection);
             return "";
         }
         public static int GetIvs(ulong id, int num, int iv)
@@ -186,6 +214,7 @@ namespace PokemonBot.Core.Data
             string query = $"SELECT {num}, * FROM '{id.ToString()}' WHERE id = {num}";
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
+            myCommand.Prepare();
             SQLiteDataReader result = myCommand.ExecuteReader();
             if (result.HasRows)
             {
@@ -215,6 +244,7 @@ namespace PokemonBot.Core.Data
             Console.WriteLine(database.myConnection.State);
             myCommand.Parameters.AddWithValue("@Id", $"{id.ToString()}");
                 myCommand.Parameters.AddWithValue("@credits", 2000);
+            myCommand.Prepare();
             myCommand.ExecuteNonQuery();
             database.CloseConnection();
             Console.WriteLine("Player info has been stored");
@@ -222,6 +252,7 @@ namespace PokemonBot.Core.Data
             string pokemonQuery = $"CREATE TABLE IF NOT EXISTS '{id.ToString()}'(id varchar(24), pokemon varchar(24), level int, nature varchar(24), hp int, atk int, def int, spatk int, spdef int, spe int, shiny int, Move1 text, Move2 text, Move3 text, Move4 text)";
                 SQLiteCommand newcommand = new SQLiteCommand(pokemonQuery, database.myConnection);
             database.OpenConnection();
+            newcommand.Prepare();
             newcommand.ExecuteNonQuery();
             database.CloseConnection();
             Console.WriteLine("Passed the Database section");
@@ -243,6 +274,7 @@ namespace PokemonBot.Core.Data
             _command.Parameters.AddWithValue("@Move2", $"Tackle");
             _command.Parameters.AddWithValue("@Move3", $"Tackle");
             _command.Parameters.AddWithValue("@Move4", $"Tackle");
+            _command.Prepare();
             _command.ExecuteNonQuery();
             
             database.CloseConnection();
@@ -258,6 +290,7 @@ namespace PokemonBot.Core.Data
             SQLiteCommand command = new SQLiteCommand(query, database.myConnection);
 
             database.OpenConnection();
+            command.Prepare();
             SQLiteDataReader result = command.ExecuteReader();
             if (result.HasRows)
             {
@@ -281,6 +314,7 @@ namespace PokemonBot.Core.Data
             string query = $"SELECT {num}, * FROM '{id.ToString()}' WHERE id = {num}";
             SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
             database.OpenConnection();
+            myCommand.Prepare();
             SQLiteDataReader result = myCommand.ExecuteReader();
             if (result.HasRows)
             {
@@ -311,6 +345,7 @@ namespace PokemonBot.Core.Data
             SQLiteCommand command = new SQLiteCommand(query, database.myConnection);
 
             database.OpenConnection();
+            command.Prepare();
             SQLiteDataReader result = command.ExecuteReader();
             if (result.HasRows)
             {
@@ -342,6 +377,7 @@ namespace PokemonBot.Core.Data
             _command.Parameters.AddWithValue("@Move2", $"Tackle");
             _command.Parameters.AddWithValue("@Move3", $"Tackle");
             _command.Parameters.AddWithValue("@Move4", $"Tackle");
+            _command.Prepare();
             _command.ExecuteNonQuery();
 
             database.CloseConnection();
