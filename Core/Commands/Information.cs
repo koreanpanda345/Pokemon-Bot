@@ -185,6 +185,31 @@ namespace PokemonBot.Core.Commands
             /**
              * Natures
               */
+              if(nature == "Lonely")
+              {
+              atk *=1.10;
+              def /= 1.10;
+              }
+              else if(nature == "Brave")
+              {
+                atk *= 1.10;
+                spe /= 1.10;
+              }
+              else if(nature == "Adamant")
+              {
+                atk *= 1.10;
+                spatk /= 1.10;
+              }
+              else if(nature == "Naughty")
+              {
+                atk *= 1.10;
+                spdef /= 1.10;
+              }
+              else if(nature == "Bold")
+              {
+                def *= 1.10;
+                atk /= 1.10;
+              }
             //Attacks
             if(nature == "Lonely")
             {
