@@ -160,8 +160,8 @@ namespace PokemonBot.Core.Commands
 
             EmbedBuilder embed1 = new EmbedBuilder();
             EmbedBuilder embed2 = new EmbedBuilder();
-            CurrentHp1 -= damageToChallenger;
-            CurrentHp2 -= damageToChallenged;
+            CurrentHp1 = CurrentHp1 - damageToChallenger;
+            CurrentHp2 = CurrentHp2 - damageToChallenged;
             embed1.WithTitle($"{User.Username}'s {Data.PokemonData.GetPokemon(User.Id, num1)}");
             embed1.WithDescription($"{CurrentHp1}/{hp1}");
             embed1.WithImageUrl(pokeSprite1);

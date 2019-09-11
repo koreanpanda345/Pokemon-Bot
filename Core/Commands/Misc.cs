@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System.Linq;
 namespace PokemonBot.Core.Commands
 {
-    public class Misc : ModuleBase<SocketCommandContext>
+     class Misc : ModuleBase<SocketCommandContext>
     {
         private readonly CommandService _service;
 
@@ -49,8 +49,9 @@ namespace PokemonBot.Core.Commands
 
             await ReplyAsync("", false, builder.Build());
         }
+        
         [Command("help")]
-        public async Task HelpAsync(string command)
+         async Task HelpAsync(string command)
         {
             var result = _service.Search(Context, command);
 

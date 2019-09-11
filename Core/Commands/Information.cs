@@ -61,16 +61,16 @@ namespace PokemonBot.Core.Commands
         }
 
         [Command("info"), Summary("Lets you info your pokemon.")]
-        public async Task InfoPokemon(string i = "0")
+        public async Task InfoPokemon(string id = "0")
         {
             int num;
-            if (i == "latest" || i == "latests")
+            if (id == "latest" || id == "latests")
             {
                 num = Data.PokemonData.GetId(Context.Message.Author.Id);
             }
             else
             {
-                num = System.Convert.ToInt32(i);
+                num = System.Convert.ToInt32(id);
                 if (num == 0)
                 {
                     num = Data.PokemonData.GetSelected(Context.Message.Author.Id);
