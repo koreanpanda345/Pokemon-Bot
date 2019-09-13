@@ -59,10 +59,20 @@ namespace PokemonBot
         }
         private async Task ConsoleInput()
         {
+            
             string input = string.Empty;
             while (input.Trim().ToLower() != "block")
             {
+                
                 input = Console.ReadLine();
+                if(input.Trim().ToLower() == "help")
+                {
+                    HelpMessage();
+                }
+                if(input.Trim().ToLower() == "activity")
+                {
+                    ActivityChange();
+                }
                 if (input.Trim().ToLower() == "message")
                 {
                     ConsoleSendMessage();
@@ -96,6 +106,33 @@ namespace PokemonBot
                     ClientStatus();
                 }
             }
+        }
+        private async void HelpMessage()
+        {
+            Console.WriteLine(
+                "help\n" +
+                "activity\n" +
+                "message\n" +
+                "spawn\n" +
+                "shinyspawn\n" +
+                "update\n" +
+                "sql\n" +
+                "close\n" +
+                "connection\n" +
+                "status");
+        }
+        private async void ActivityChange()
+        {
+            var msg = string.Empty;
+            while (msg.Trim() == string.Empty)
+            {
+                Console.WriteLine("Status: ");
+                msg = Console.ReadLine();
+            }
+            if(msg == "online") await client.SetStatusAsync(UserStatus.Online);
+            if(msg == "idle") await client.SetStatusAsync(UserStatus.Idle);
+            if(msg == "dnd") await client.SetStatusAsync(UserStatus.DoNotDisturb);
+            if(msg == "inv") await client.SetStatusAsync(UserStatus.Invisible);
         }
         private async void ClientStatus()
         {
@@ -150,7 +187,7 @@ namespace PokemonBot
                         }
                         else
                         {
-                            Console.WriteLine(result);
+                            Console.WriteLine(result.ToString());
                         }
 
                     }
