@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using System.Linq;
 namespace PokemonBot.Core.Commands
 {

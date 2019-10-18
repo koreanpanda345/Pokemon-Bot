@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using Discord;
 using Discord.Commands;
 using System.Threading.Tasks;
@@ -8,8 +7,6 @@ using System.Data.SQLite;
 using PokeApiNet.Data;
 using PokeApiNet.Models;
 using PokemonBot.Resources.Database;
-using PokemonBot.Core.Data;
-using Discord.Rest;
 namespace PokemonBot.Core.Commands
 {
     public class Information : ModuleBase<SocketCommandContext>
@@ -119,11 +116,12 @@ namespace PokemonBot.Core.Commands
 
             if (Data.PokemonData.IsShiny(Context.Message.Author.Id, num) == true)
             {
-                embed.WithImageUrl(poke.Sprites.FrontShiny);
+                embed.WithImageUrl($"https://play.pokemonshowdown.com/sprites/xyani-shiny/" + Data.PokemonData.GetPokemon(Context.Message.Author.Id, num) + ".gif");
+
             }
             else
             {
-                embed.WithImageUrl(poke.Sprites.FrontDefault);
+                embed.WithImageUrl($"http://play.pokemonshowdown.com/sprites/xyani/" + Data.PokemonData.GetPokemon(Context.Message.Author.Id, num) + ".gif");
             }
             embed.WithFooter($"{num} of {Data.PokemonData.GetId(Context.Message.Author.Id)} Pokemon");
 

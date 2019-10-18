@@ -2,80 +2,64 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
+using Discord;
+using Discord.WebSocket;
 using System.Data.SQLite;
+using Newtonsoft.Json;
+using System.IO;
 using PokemonBot.Resources.Database;
 
 namespace PokemonBot.Core.Data
 {
-    public static class BattleData
+
+    public class Turns
     {
-        public static async Task CreateBattle(ulong id1, ulong id2)
+        //What turn it is on.
+        public int turn { get; set; }
+        //Who is player 1.
+        public ulong player1 { get; set; }
+        //Who is player 2.
+        public ulong player2 { get; set; }
+        //Which pokemon is active for player 1
+        public int p1active { get; set; }
+        //Which pokemon is active for player 2
+        public int p2active { get; set; }
+        
+    }
+
+    public class teamData
+    {
+        public int pokemon1 { get; set; }
+        public int pokemon2 { get; set; }
+        public int pokemon3 { get; set; }
+        public int pokemon4 { get; set; }
+        public int pokemon5 { get; set; }
+        public int pokemon6 { get; set; }
+
+        public teamData(ulong player)
         {
-            SqliteDbContext database = new SqliteDbContext();
-            string query = "INSERT INTO battles(Challengerid, Challengedid, IsBattling)VALUES(@challengerid, @challengedid, @isBattling);";
-            SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
-            database.OpenConnection();
-            myCommand.Parameters.AddWithValue("@challengerid", id1);
-            myCommand.Parameters.AddWithValue("@challengedid", id2);
-            myCommand.Parameters.AddWithValue("@isBattling", false);
-            myCommand.ExecuteNonQuery();
-            database.CloseConnection();
-            Console.WriteLine("Battle was made.");
+           
         }
-        public static async Task StartBattle(ulong id)
+        public int GetPokemon(ulong user, int slot)
         {
-            SqliteDbContext database = new SqliteDbContext();
-            string query = $"UPDATE 'battles' SET IsBattling = @isBattling WHERE Challengedid = {id}, IsBattling = false";
-            SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
-            database.OpenConnection();
-            myCommand.Parameters.AddWithValue("@isBattling", "true");
-            myCommand.ExecuteNonQuery();
-            database.CloseConnection();
-            Console.WriteLine("Set IsBattling to True");
-        }
-        public static int GetDuelId(ulong id)
-        {
-            SqliteDbContext database = new SqliteDbContext();
-            string query = $"SELECT DuelId, * FROM battles WHERE Challengedid = {id}";
-            SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
-            database.OpenConnection();
-            SQLiteDataReader result = myCommand.ExecuteReader();
+            SqliteDbContext db = new SqliteDbContext();
+            string query = $"SELECT * FROM \"Teams\" where user = {user}";
+            SQLiteCommand cmd = new SQLiteCommand(query, db.myConnection);
+            db.OpenConnection();
+            cmd.Prepare();
+            SQLiteDataReader result = cmd.ExecuteReader();
+            int i;
             if (result.HasRows)
             {
                 while (result.Read())
                 {
-                    int i;
-                    string intString = result["Challengerid"].ToString();
+                    string intString = result[$"pokemon{slot}"].ToString();
                     i = System.Convert.ToInt32(intString);
-                    Console.WriteLine($"{result}");
                     return i;
                 }
             }
             result.Close();
-            database.CloseConnection();
-            return 0;
-        }
-        public static ulong GetChallenger(int Duelid)
-        {
-            SqliteDbContext database = new SqliteDbContext();
-            string query = $"SELECT Challengerid, * FROM battles WHERE DuelId = {Duelid}";
-            SQLiteCommand myCommand = new SQLiteCommand(query, database.myConnection);
-            database.OpenConnection();
-            SQLiteDataReader result = myCommand.ExecuteReader();
-            if (result.HasRows)
-            {
-                while (result.Read())
-                {
-                    ulong i;
-                    string intString = result["Challengerid"].ToString();
-                    i = System.Convert.ToUInt64(intString);
-                    Console.WriteLine($"{result}");
-                    return i;
-                }
-            }
-            result.Close();
-            database.CloseConnection();
+            db.CloseConnection();
             return 0;
         }
     }

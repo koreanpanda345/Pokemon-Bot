@@ -9,3 +9,14 @@ C:\Users\korea\source\repos\PokemonBot\PokemonBot\obj\Debug\netcoreapp2.1\Pokemo
 C:\Users\korea\source\repos\PokemonBot\PokemonBot\bin\Debug\netcoreapp2.1\PokemonBot.pdb
 C:\Users\korea\source\repos\PokemonBot\PokemonBot\obj\Debug\netcoreapp2.1\PokemonBot.dll
 C:\Users\korea\source\repos\PokemonBot\PokemonBot\obj\Debug\netcoreapp2.1\PokemonBot.pdb
+C:\Users\korea\source\repos\Pokemon-Bot\bin\Debug\netcoreapp2.1\PokemonBot.deps.json
+C:\Users\korea\source\repos\Pokemon-Bot\bin\Debug\netcoreapp2.1\PokemonBot.runtimeconfig.json
+C:\Users\korea\source\repos\Pokemon-Bot\bin\Debug\netcoreapp2.1\PokemonBot.runtimeconfig.dev.json
+C:\Users\korea\source\repos\Pokemon-Bot\bin\Debug\netcoreapp2.1\PokemonBot.dll
+C:\Users\korea\source\repos\Pokemon-Bot\bin\Debug\netcoreapp2.1\PokemonBot.pdb
+C:\Users\korea\source\repos\Pokemon-Bot\obj\Debug\netcoreapp2.1\PokemonBot.csprojAssemblyReference.cache
+C:\Users\korea\source\repos\Pokemon-Bot\obj\Debug\netcoreapp2.1\PokemonBot.csproj.CoreCompileInputs.cache
+C:\Users\korea\source\repos\Pokemon-Bot\obj\Debug\netcoreapp2.1\PokemonBot.AssemblyInfoInputs.cache
+C:\Users\korea\source\repos\Pokemon-Bot\obj\Debug\netcoreapp2.1\PokemonBot.AssemblyInfo.cs
+C:\Users\korea\source\repos\Pokemon-Bot\obj\Debug\netcoreapp2.1\PokemonBot.dll
+C:\Users\korea\source\repos\Pokemon-Bot\obj\Debug\netcoreapp2.1\PokemonBot.pdb

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using PokemonBot.Resources.Database;
-using System.Linq;
 using System.Data.SQLite;
-using Newtonsoft.Json;
 namespace PokemonBot.Core.Data
 {
     public class Id
